@@ -12,14 +12,11 @@ var (
 
 // GetLogger returns a singleton instance of a zap.Logger.
 //
-// It initializes the logger once using zap.NewDevelopment().
-// If initialization fails, it panics.
-//
 // Later calls return the same logger instance.
 func GetLogger() *zap.Logger {
 	once.Do(func() {
 		var err error
-		log, err = zap.NewDevelopment()
+		log, err = zap.NewProduction()
 		if err != nil {
 			panic(err)
 		}

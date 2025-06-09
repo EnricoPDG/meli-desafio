@@ -1,0 +1,321 @@
+definitions:
+  model.Address:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      state:
+        type: string
+    type: object
+  model.Image:
+    properties:
+      size:
+        type: string
+      url:
+        type: string
+    type: object
+  model.Price:
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+    type: object
+  model.Product:
+    properties:
+      condition:
+        type: string
+      create_at:
+        type: string
+      description:
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426655440000
+        type: string
+      images:
+        items:
+          $ref: '#/definitions/model.Image'
+        type: array
+      payment_methods:
+        items:
+          type: string
+        type: array
+      price:
+        $ref: '#/definitions/model.Price'
+      rating:
+        type: number
+      seller_id:
+        type: string
+      short_description:
+        type: string
+      sold_quantity:
+        type: integer
+      stock:
+        type: integer
+      title:
+        type: string
+      update_at:
+        type: string
+    type: object
+  model.Reputation:
+    properties:
+      level:
+        type: string
+      transaction:
+        $ref: '#/definitions/model.Transaction'
+    type: object
+  model.Review:
+    properties:
+      author:
+        type: string
+      content:
+        type: string
+      create_at:
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426655440000
+        type: string
+      product_id:
+        type: string
+      rating:
+        type: number
+      update_at:
+        type: string
+    type: object
+  model.Seller:
+    properties:
+      address:
+        $ref: '#/definitions/model.Address'
+      create_at:
+        type: string
+      email:
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426655440000
+        type: string
+      name:
+        type: string
+      nickname:
+        type: string
+      phone:
+        type: string
+      reputation:
+        $ref: '#/definitions/model.Reputation'
+      update_at:
+        type: string
+    type: object
+  model.Transaction:
+    properties:
+      canceled:
+        type: integer
+      completed:
+        type: integer
+      rating:
+        type: number
+    type: object
+  response.JSONErrorResponse:
+    properties:
+      message:
+        example: something went wrong
+        type: string
+      timestamp:
+        example: "2025-06-05T18:44:26.131446-03:00"
+        type: string
+    type: object
+  response.JSONSuccessResultProduct:
+    properties:
+      data:
+        $ref: '#/definitions/model.Product'
+      message:
+        example: success
+        type: string
+      timestamp:
+        example: "2025-06-05T18:44:26.131446-03:00"
+        type: string
+    type: object
+  response.JSONSuccessResultProducts:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.Product'
+        type: array
+      message:
+        example: success
+        type: string
+      number_of_products:
+        example: 10
+        type: integer
+      timestamp:
+        example: "2025-06-05T18:44:26.131446-03:00"
+        type: string
+    type: object
+  response.JSONSuccessResultReview:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.Review'
+        type: array
+      message:
+        example: success
+        type: string
+      timestamp:
+        example: "2025-06-05T18:44:26.131446-03:00"
+        type: string
+    type: object
+  response.JSONSuccessResultSeller:
+    properties:
+      data:
+        $ref: '#/definitions/model.Seller'
+      message:
+        example: success
+        type: string
+      timestamp:
+        example: "2025-06-05T18:44:26.131446-03:00"
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Meli Desafio - Enrico Papsch Di Giacomo
+  title: Meli Desafio
+  version: "1.0"
+paths:
+  /api/v1/products:
+    get:
+      consumes:
+      - application/json
+      description: List products
+      parameters:
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JSONSuccessResultProducts'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.JSONErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.JSONErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.JSONErrorResponse'
+      summary: List products
+      tags:
+      - products
+  /api/v1/products/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get details of a product
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JSONSuccessResultProduct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.JSONErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.JSONErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.JSONErrorResponse'
+      summary: Get product by ID
+      tags:
+      - products
+  /api/v1/products/{id}/reviews:
+    get:
+      consumes:
+      - application/json
+      description: Get reviews
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JSONSuccessResultReview'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.JSONErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.JSONErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.JSONErrorResponse'
+      summary: Get reviews by product ID
+      tags:
+      - products
+  /api/v1/sellers/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get details of a seller
+      parameters:
+      - description: Sellers ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.JSONSuccessResultSeller'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.JSONErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.JSONErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.JSONErrorResponse'
+      summary: Get seller by ID
+      tags:
+      - sellers
+swagger: "2.0"

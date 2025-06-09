@@ -5,9 +5,7 @@ import (
 	"github.com/EnricoPDG/meli-desafio/logger"
 	"github.com/EnricoPDG/meli-desafio/router"
 	"github.com/EnricoPDG/meli-desafio/service"
-	"github.com/joho/godotenv"
 	"go.uber.org/zap"
-	"os"
 )
 
 // @title Meli Desafio
@@ -18,14 +16,9 @@ import (
 var log = logger.GetLogger()
 
 func main() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Error("Error loading .env file", zap.Error(err))
-	}
-
-	productFilePath := os.Getenv("PRODUCT_FILE_PATH")
-	reviewFilePath := os.Getenv("REVIEW_FILE_PATH")
-	sellerFilePath := os.Getenv("SELLER_FILE_PATH")
+	productFilePath := "data/products.json"
+	reviewFilePath := "data/reviews.json"
+	sellerFilePath := "data/sellers.json"
 
 	productService := service.NewProductService(productFilePath, reviewFilePath)
 	sellerService := service.NewSellerService(sellerFilePath)
